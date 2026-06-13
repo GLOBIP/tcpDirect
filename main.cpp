@@ -12,11 +12,53 @@
 using boost::asio::ip::tcp;
 using std::filesystem::path;
 using NetworkSize = boost::endian::big_uint64_t;
+namespace fs = std::filesystem;
 static std::vector<char> read_file(path const &fspec) {
   std::ifstream file(fspec, std::ios::binary);
   return std::vector<char>(std::istreambuf_iterator<char>(file), {});
 }
 
+void ListDirectory(std::string path) {
+  std::cout << "CURRENT DIRECTORY IS: \t" << path << '\n';
+  const fs::path target_path{path};
+
+  try {
+    for (auto const &dir_entry : fs::directory_iterator{target_path}) {
+      if (fs::is_regular_file(dir_entry.path())) {
+        std::cout << dir_entry.path().filename().string() << std::endl;
+      }
+    }
+  } catch (fs::filesystem_error const &ex) {
+    std::cout << "Error occurred during file operations!\n"
+              << ex.what() << std::endl;
+    return;
+  }
+}
+void ChangeDirectory(std::string &path) {
+  std::cout << "AVAILABLE COMMANDS: " << std::endl;
+  std::cout << "cd .." << std::endl;
+  std::cout << "cd ~" << std::endl;
+  std::cout << "<PATH>" << std::endl;
+  std::cout << "End file <PATH> with ';' for example: /home/user/file.txt;  "
+            << std::endl;
+  std::string command = "";
+  while (command != ";" || command.back() != ';') {
+    std::cin >> command;
+    if (command.back() == ';') {
+      path = command;
+      path.pop_back();
+      ListDirectory(path);
+      break;
+    }
+
+    if (command != ";") {
+      path = command;
+    } else {
+      break;
+    }
+    ListDirectory(path);
+  }
+}
 void send_file_content_over_tcp(path const &fspec, tcp::socket &socket) {
   auto const contents = read_file(fspec);
   std::cout << "File read successfully. File size: " << contents.size()
@@ -43,7 +85,8 @@ int main() {
 
       tcp::socket socket(io);
       acceptor.accept(socket);
-      std::string place = "/home/kamil/Dokumenty/ftpDSERVER/DATASENT/";
+      std::string place = "/home/";
+      ChangeDirectory(place);
       std::string whatFile = "";
       std::cout << "GIVE A FILE: ";
       std::cin >> whatFile;
