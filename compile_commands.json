@@ -1,0 +1,16 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-I",
+      "/home/kamil/boostasio/boost_1_82_0",
+      "-c",
+      "-o",
+      "main.o",
+      "main.cpp"
+    ],
+    "directory": "/home/kamil/Dokumenty/ftpDSERVER",
+    "file": "/home/kamil/Dokumenty/ftpDSERVER/main.cpp",
+    "output": "/home/kamil/Dokumenty/ftpDSERVER/main.o"
+  }
+]
