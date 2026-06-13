@@ -43,8 +43,13 @@ int main() {
 
       tcp::socket socket(io);
       acceptor.accept(socket);
-      send_file_content_over_tcp(
-          "/home/kamil/Dokumenty/ftpDSERVER/DATASENT/FILE_SENT.txt", socket);
+      std::string place = "/home/kamil/Dokumenty/ftpDSERVER/DATASENT/";
+      std::string whatFile = "";
+      std::cout << "GIVE A FILE: ";
+      std::cin >> whatFile;
+      std::cout << "THANKS";
+      place += whatFile;
+      send_file_content_over_tcp(place, socket);
     }
   } catch (std::exception &e) {
     std::cerr << e.what() << '\n';
