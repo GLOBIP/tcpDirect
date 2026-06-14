@@ -28,11 +28,27 @@ void ListFilesInDirectory(std::string path) {
     return;
   }
 }
-
-void ListDirectories(std::string s) {
-  for (auto &p : std::filesystem::directory_iterator(s))
-    if (p.is_directory())
+void sendDirectoryCLIENT(tcp::socket &mysocket,
+                         const std::filesystem::directory_entry &directory) {
+  try {
+    boost::system::error_code ignored_error;
+    std::string path = directory.path().string() + '\n';
+    boost::asio::write(mysocket, boost::asio::buffer(path), ignored_error);
+  } catch (std::exception &e) {
+    std::cerr << e.what() << std::endl;
+  }
+}
+void ListDirectories(tcp::socket &mysocket, std::string s) {
+  for (auto &p : std::filesystem::directory_iterator(s)) {
+    if (p.is_directory()) {
       std::cout << p << std::endl;
+      sendDirectoryCLIENT(mysocket, p);
+    }
+  }
+
+  boost::system::error_code ignored_error;
+  std::string end = "|";
+  boost::asio::write(mysocket, boost::asio::buffer(end), ignored_error);
 }
 
 std::vector<std::string> goFunc(std::string str) {
@@ -73,7 +89,7 @@ void ChangeDirectory(std::string &path, tcp::socket &mysocket) {
     std::cout << "\nOUR DIRECTORY CURRENTLY IS: \t" << path << '\n';
     std::cout << "----------        ----------";
     std::cout << "DIRECTORIES ARE: \n";
-    ListDirectories(path);
+    ListDirectories(mysocket, path);
     std::cout << '\n';
 
     // OUR COMMAND TO USE AND CHECK GODDAMNIT
