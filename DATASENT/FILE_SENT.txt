@@ -1,2 +1,186 @@
-czesc to ja serwer
-To jest test
+
+░▒▓       ▓▒░ ◦•······················································································································•◦ ░▒▓   17ms ▓▒░
+··• uname --help
+Składnia: uname [OPCJA]...
+Napisanie informacji o systemie. Bez opcji działa jak z -s.
+
+  -a, --all                pokazanie wszystkich informacji w następującej
+                             kolejności, oprócz -p i -i, jeżeli nieznane:
+  -s, --kernel-name        pokazanie nazwy jądra systemu operacyjnego
+  -n, --nodename           pokazanie sieciowej nazwy systemu
+  -r, --kernel-release     pokazanie numeru edycji jądra systemu
+  -v, --kernel-version     wypisanie numeru wersji jądra systemu
+  -m, --machine            wypisanie nazwy sprzętu (architektury)
+  -p, --processor          wypisanie typu procesora (nieprzenośne)
+  -i, --hardware-platform  wypisanie platformy sprzętowej (nieprzenośne)
+  -o, --operating-system   wypisanie nazwy systemu operacyjnego
+      --help        wyświetlenie tego opisu i zakończenie
+      --version     wyświetlenie informacji o wersji i zakończenie
+
+Pomoc do GNU coreutils w sieci: https://www.gnu.org/software/coreutils/
+O błędach tłumaczenia poinformuj przez https://translationproject.org/team/pl.html
+Pełna dokumentacja: https://www.gnu.org/software/coreutils/uname
+albo dostępna lokalnie przez: info '(coreutils) uname invocation'
+
+░▒▓       ▓▒░ ◦•·······················································································································•◦ ░▒▓   3ms ▓▒░
+··• uname -i
+unknown
+
+░▒▓       ▓▒░ ◦•·······················································································································•◦ ░▒▓   9ms ▓▒░
+··• uname -p
+unknown
+
+░▒▓       ▓▒░ ◦•·······················································································································•◦ ░▒▓   9ms ▓▒░
+··• uname -m
+x86_64
+
+░▒▓       ▓▒░ ◦•······················································································································•◦ ░▒▓   10ms ▓▒░
+··• uname -v
+#1 SMP PREEMPT_DYNAMIC Tue Mar 25 08:23:44 UTC 2025
+
+░▒▓       ▓▒░ ◦•······················································································································•◦ ░▒▓   10ms ▓▒░
+··• uname -r
+6.13.8-201.nobara.fc41.x86_64
+
+░▒▓       ▓▒░ ◦•······················································································································•◦ ░▒▓   10ms ▓▒░
+··• uname -all
+uname: błędna opcja -- 'l'
+Napisz „uname --help” dla uzyskania informacji.
+
+░▒▓       ▓▒░ ◦•······················································································································•◦ ░▒▓   11ms ▓▒░
+··• uname -a
+Linux nobara-pc 6.13.8-201.nobara.fc41.x86_64 #1 SMP PREEMPT_DYNAMIC Tue Mar 25 08:23:44 UTC 2025 x86_64 GNU/Linux
+
+░▒▓       ▓▒░ ◦•······················································································································•◦ ░▒▓   10ms ▓▒░
+··• ^C
+
+░▒▓       ▓▒░ ◦•···························································································································•◦ ░▒▓ 🧱 ▓▒░
+··• ^C
+
+░▒▓       ▓▒░ ◦•···························································································································•◦ ░▒▓ 🧱 ▓▒░
+··• ^C
+
+░▒▓       ▓▒░ ◦•···························································································································•◦ ░▒▓ 🧱 ▓▒░
+··• Iscpu --help
+bash: Iscpu: nie odnaleziono polecenia...
+
+░▒▓       ▓▒░ ◦•·····················································································································•◦ ░▒▓   632ms ▓▒░
+··• Iscpu
+bash: Iscpu: nie odnaleziono polecenia...
+
+░▒▓       ▓▒░ ◦•·····················································································································•◦ ░▒▓   100ms ▓▒░
+··• lscpu
+Architecture:             x86_64
+  CPU op-mode(s):         32-bit, 64-bit
+  Address sizes:          39 bits physical, 48 bits virtual
+  Byte Order:             Little Endian
+CPU(s):                   20
+  On-line CPU(s) list:    0-19
+Vendor ID:                GenuineIntel
+  Model name:             13th Gen Intel(R) Core(TM) i5-13600KF
+    CPU family:           6
+    Model:                183
+    Thread(s) per core:   2
+    Core(s) per socket:   14
+    Socket(s):            1
+    Stepping:             1
+    CPU(s) scaling MHz:   76%
+    CPU max MHz:          5100,0000
+    CPU min MHz:          800,0000
+    BogoMIPS:             6988,80
+    Flags:                fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx p
+                          dpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc cpuid aperfmperf tsc_known_freq pni pclm
+                          ulqdq dtes64 monitor ds_cpl vmx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes 
+                          xsave avx f16c rdrand lahf_lm abm 3dnowprefetch cpuid_fault ssbd ibrs ibpb stibp ibrs_enhanced tpr_shadow flexpriority ept vpid ept_
+                          ad fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid rdseed adx smap clflushopt clwb intel_pt sha_ni xsaveopt xsavec xgetbv1 xsav
+                          es split_lock_detect user_shstk avx_vnni dtherm ida arat pln pts hwp hwp_notify hwp_act_window hwp_epp hwp_pkg_req hfi vnmi umip pku
+                           ospke waitpkg gfni vaes vpclmulqdq rdpid movdiri movdir64b fsrm md_clear serialize arch_lbr ibt flush_l1d arch_capabilities
+Virtualization features:  
+  Virtualization:         VT-x
+Caches (sum of all):      
+  L1d:                    544 KiB (14 instances)
+  L1i:                    704 KiB (14 instances)
+  L2:                     20 MiB (8 instances)
+  L3:                     24 MiB (1 instance)
+NUMA:                     
+  NUMA node(s):           1
+  NUMA node0 CPU(s):      0-19
+Vulnerabilities:          
+  Gather data sampling:   Not affected
+  Itlb multihit:          Not affected
+  L1tf:                   Not affected
+  Mds:                    Not affected
+  Meltdown:               Not affected
+  Mmio stale data:        Not affected
+  Reg file data sampling: Mitigation; Clear Register File
+  Retbleed:               Not affected
+  Spec rstack overflow:   Not affected
+  Spec store bypass:      Mitigation; Speculative Store Bypass disabled via prctl
+  Spectre v1:             Mitigation; usercopy/swapgs barriers and __user pointer sanitization
+  Spectre v2:             Mitigation; Enhanced / Automatic IBRS; IBPB conditional; RSB filling; PBRSB-eIBRS SW sequence; BHI BHI_DIS_S
+  Srbds:                  Not affected
+  Tsx async abort:        Not affected
+
+░▒▓       ▓▒░ ◦•·······················································································································•◦ ░▒▓   8ms ▓▒░
+··• lscpu --help
+
+Usage:
+ lscpu [options]
+
+Display information about the CPU architecture.
+
+Options:
+ -a, --all               print both online and offline CPUs (default for -e)
+ -b, --online            print online CPUs only (default for -p)
+ -B, --bytes             print sizes in bytes rather than in human readable format
+ -C, --caches[=<list>]   info about caches in extended readable format
+ -c, --offline           print offline CPUs only
+ -J, --json              use JSON for default or extended format
+ -e, --extended[=<list>] print out an extended readable format
+ -p, --parse[=<list>]    print out a parsable format
+ -s, --sysroot <dir>     use specified directory as system root
+ -x, --hex               print hexadecimal masks rather than lists of CPUs
+ -y, --physical          print physical instead of logical IDs
+     --hierarchic[=when] use subsections in summary (auto, never, always)
+     --output-all        print all available columns for -e, -p or -C
+
+ -h, --help              display this help
+ -V, --version           display version
+
+Available output columns for -e or -p:
+      BOGOMIPS  crude measurement of CPU speed
+           CPU  logical CPU number
+          CORE  logical core number
+        SOCKET  logical socket number
+       CLUSTER  logical cluster number
+          NODE  logical NUMA node number
+          BOOK  logical book number
+        DRAWER  logical drawer number
+         CACHE  shows how caches are shared between CPUs
+  POLARIZATION  CPU dispatching mode on virtual hardware
+       ADDRESS  physical address of a CPU
+    CONFIGURED  shows if the hypervisor has allocated the CPU
+        ONLINE  shows if Linux currently makes use of the CPU
+           MHZ  shows the currently MHz of the CPU
+      SCALMHZ%  shows scaling percentage of the CPU frequency
+        MAXMHZ  shows the maximum MHz of the CPU
+        MINMHZ  shows the minimum MHz of the CPU
+     MODELNAME  shows CPU model name
+
+Available output columns for -C:
+      ALL-SIZE  size of all system caches
+         LEVEL  cache level
+          NAME  cache name
+      ONE-SIZE  size of one cache
+          TYPE  cache type
+          WAYS  ways of associativity
+  ALLOC-POLICY  allocation policy
+  WRITE-POLICY  write policy
+      PHY-LINE  number of physical cache line per cache tag
+          SETS  number of sets in the cache; set lines has the same cache index
+ COHERENCY-SIZE  minimum amount of data in bytes transferred from memory to cache
+
+For more details see lscpu(1).
+
+░▒▓       ▓▒░ ◦•·······················································································································•◦ ░▒▓   4ms ▓▒░
+··• 
