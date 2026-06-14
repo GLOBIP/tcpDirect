@@ -68,8 +68,7 @@ void ListDirectories(boost::asio::io_context &io, tcp::socket &mysocket,
 
   boost::system::error_code ignored_error;
   std::string end = "|";
-  // boost::asio::steady_timer t(io, boost::asio::chrono::milliseconds(100));
-  // t.wait();
+
   boost::asio::write(mysocket, boost::asio::buffer(end), ignored_error);
 }
 
