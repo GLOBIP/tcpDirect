@@ -1,5 +1,7 @@
 #pragma once
+#include "boost/asio/detail/chrono.hpp"
 #include "boost/asio/ip/tcp.hpp"
+#include "boost/asio/steady_timer.hpp"
 #include "boost/system/detail/error_code.hpp"
 #include <bits/stdc++.h>
 #include <boost/asio.hpp>
@@ -38,7 +40,8 @@ void sendDirectoryCLIENT(tcp::socket &mysocket,
     std::cerr << e.what() << std::endl;
   }
 }
-void ListDirectories(tcp::socket &mysocket, std::string s) {
+void ListDirectories(boost::asio::io_context &io, tcp::socket &mysocket,
+                     std::string s) {
   for (auto &p : std::filesystem::directory_iterator(s)) {
     if (p.is_directory()) {
       std::cout << p << std::endl;
@@ -48,6 +51,8 @@ void ListDirectories(tcp::socket &mysocket, std::string s) {
 
   boost::system::error_code ignored_error;
   std::string end = "|";
+  boost::asio::steady_timer t(io, boost::asio::chrono::seconds(3));
+  t.wait();
   boost::asio::write(mysocket, boost::asio::buffer(end), ignored_error);
 }
 
@@ -75,7 +80,8 @@ void sendPathToClient(std::string &path, tcp::socket &mysocket) {
   }
   path.pop_back();
 }
-void ChangeDirectory(std::string &path, tcp::socket &mysocket) {
+void ChangeDirectory(boost::asio::io_context &io, std::string &path,
+                     tcp::socket &mysocket) {
   std::cout << "AVAILABLE COMMANDS: " << std::endl;
 
   std::cout << "<PATH>" << std::endl;
@@ -89,7 +95,7 @@ void ChangeDirectory(std::string &path, tcp::socket &mysocket) {
     std::cout << "\nOUR DIRECTORY CURRENTLY IS: \t" << path << '\n';
     std::cout << "----------        ----------";
     std::cout << "DIRECTORIES ARE: \n";
-    ListDirectories(mysocket, path);
+    ListDirectories(io, mysocket, path);
     std::cout << '\n';
 
     // OUR COMMAND TO USE AND CHECK GODDAMNIT
