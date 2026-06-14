@@ -50,10 +50,7 @@ int main() {
       ChangeDirectory(io, place, socket);
       std::string whatFile = "";
       std::cout << "GIVE A FILE: ";
-      std::cin >> whatFile;
-      std::cout << "THANKS";
-      place += whatFile;
-      std::cout << "WHERE IS: " << place << std::endl;
+      std::cout << "PATH IS: " << place << std::endl;
       send_file_content_over_tcp(place, socket);
     }
   } catch (std::exception &e) {
