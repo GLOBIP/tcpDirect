@@ -126,11 +126,15 @@ void ChangeDirectory(boost::asio::io_context &io, std::string &path,
 
   std::cout << "SERWER URUCHOMIONY W TRYBIE NASŁUCHIWANIA KLIENTA" << std::endl;
   // DIRECTORY SEARCH MODE
+  bool showDirectories = true;
   while (true) {
 
-    sendPathToClient(path, mysocket);
-    ListDirectories(io, mysocket, path);
-
+    sendPathToClient(path, mysocket); // send path
+    if (showDirectories)
+      ListDirectories(io, mysocket,
+                      path); // see directories AND SEND IT TO CLIENT
+    else
+      showDirectories = true;
     std::cout << "\n[SERWER] Aktualna sciezka wyslana: " << path << std::endl;
 
     std::cout << "[SERWER] Czekam na decyzje klienta..." << std::endl;
@@ -140,7 +144,14 @@ void ChangeDirectory(boost::asio::io_context &io, std::string &path,
       std::cout << "wychodzimy z petli";
       break;
     }
-    path = receviedPath;
+    if (receviedPath == "GIVE_FILES") {
+      std::cout << "WYŚWIOETL PLIK " << std::endl;
+      ListFilesInDirectory(path, mysocket); // LIST FILES AND SEND TO CLIENT
+      showDirectories = false;
+      receviedPath = path;
+    } else {
+      path = receviedPath;
+    }
     std::cout << "[SERWER] Klient zmienil sciezke na: " << path << std::endl;
     std::cout << "---------- ----------" << std::endl;
   }
