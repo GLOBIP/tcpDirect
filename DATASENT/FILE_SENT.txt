@@ -1,3 +1,2 @@
-Witaj to ja serwer i ja ci wysyłam plik!
-Lubie kiedy ktoś odczytuje to!
-TO JEST SUPERRR
+czesc to ja serwer
+To jest test

@@ -1,13 +1,17 @@
 #pragma once
+#include "boost/asio/ip/tcp.hpp"
+#include "boost/system/detail/error_code.hpp"
+#include <bits/stdc++.h>
+#include <boost/asio.hpp>
+#include <exception>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <string>
 
-#include <bits/stdc++.h>
-
 namespace fs = std::filesystem;
 
+using boost::asio::ip::tcp;
 void ListFilesInDirectory(std::string path) {
   std::cout << "CURRENT DIRECTORY IS: \t" << path << '\n';
   const fs::path target_path{path};
@@ -44,8 +48,18 @@ std::vector<std::string> goFunc(std::string str) {
   }
   return v;
 }
-
-void ChangeDirectory(std::string &path) {
+void sendPathToClient(std::string &path, tcp::socket &mysocket) {
+  std::cout << "Wyslij Path";
+  path += '~';
+  try {
+    boost::system::error_code ignored_error;
+    boost::asio::write(mysocket, boost::asio::buffer(path), ignored_error);
+  } catch (std::exception &e) {
+    std::cerr << e.what() << std::endl;
+  }
+  path.pop_back();
+}
+void ChangeDirectory(std::string &path, tcp::socket &mysocket) {
   std::cout << "AVAILABLE COMMANDS: " << std::endl;
 
   std::cout << "<PATH>" << std::endl;
@@ -90,5 +104,6 @@ void ChangeDirectory(std::string &path) {
       std::cout << "ACCEPT THE FATE";
       path = command;
     }
+    sendPathToClient(path, mysocket);
   }
 }
