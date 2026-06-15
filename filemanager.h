@@ -15,27 +15,32 @@ namespace fs = std::filesystem;
 
 using boost::asio::ip::tcp;
 
-void sendFileClient(tcp::socket &mysocket, std::string file) {
+// SERWER - |
+// CLIENT - ~
+
+void sendDirectoryCLIENT(tcp::socket &mysocket,
+                         std::string sendDirectoriesString) {
   try {
     boost::system::error_code ignored_error;
-    file.push_back('\n');
-    boost::asio::write(mysocket, boost::asio::buffer(file), ignored_error);
+    boost::asio::write(mysocket, boost::asio::buffer(sendDirectoriesString),
+                       ignored_error);
   } catch (std::exception &e) {
     std::cerr << e.what() << std::endl;
   }
 }
-
 void ListFilesInDirectory(std::string path, tcp::socket &mysocket) {
   std::cout << "CURRENT DIRECTORY IS: \t" << path << '\n';
   const fs::path target_path{path};
-
+  std::string sendDirectoriesString = "";
+  int count = 0;
   try {
     for (auto const &dir_entry : fs::directory_iterator{target_path}) {
       if (fs::is_regular_file(dir_entry.path())) {
         std::cout << dir_entry.path().filename().string() << std::endl;
         std::string fileNameWithNewline =
             dir_entry.path().filename().string() + '\n';
-        sendFileClient(mysocket, fileNameWithNewline);
+        sendDirectoriesString += fileNameWithNewline;
+        count++;
       }
     }
   } catch (fs::filesystem_error const &ex) {
@@ -43,33 +48,48 @@ void ListFilesInDirectory(std::string path, tcp::socket &mysocket) {
               << ex.what() << std::endl;
     return;
   }
-  boost::system::error_code ignored_error;
-  boost::asio::write(mysocket, boost::asio::buffer("|"), ignored_error);
-}
-void sendDirectoryCLIENT(tcp::socket &mysocket,
-                         const std::filesystem::directory_entry &directory) {
-  try {
+  if (count == 0) {
     boost::system::error_code ignored_error;
-    std::string path = directory.path().string() + '\n';
-    boost::asio::write(mysocket, boost::asio::buffer(path), ignored_error);
-  } catch (std::exception &e) {
-    std::cerr << e.what() << std::endl;
+    boost::asio::write(mysocket, boost::asio::buffer("~"), ignored_error);
+    return;
   }
+  sendDirectoriesString.push_back('~');
+  sendDirectoriesString.push_back('~');
+
+  std::cout << "-----------------";
+  std::cout << "DANO CLIENTOWI PLIK DO : " << sendDirectoriesString
+            << std::endl;
+  std::cout << "-----------------";
+
+  sendDirectoryCLIENT(mysocket, sendDirectoriesString);
 }
+
 void ListDirectories(boost::asio::io_context &io, tcp::socket &mysocket,
                      std::string s) {
   std::cout << std::endl;
+  std::string sendDirectoriesString = "";
+  int count = 0;
   for (auto &p : std::filesystem::directory_iterator(s)) {
     if (p.is_directory()) {
+      count++;
       std::cout << p << std::endl;
-      sendDirectoryCLIENT(mysocket, p);
+      sendDirectoriesString += p.path().string();
+      sendDirectoriesString.push_back('\n');
     }
   }
-
-  boost::system::error_code ignored_error;
-  std::string end = "|";
-
-  boost::asio::write(mysocket, boost::asio::buffer(end), ignored_error);
+  if (count == 0) {
+    boost::system::error_code ignored_error;
+    boost::asio::write(mysocket, boost::asio::buffer("~"), ignored_error);
+    return;
+  }
+  sendDirectoriesString.push_back('~');
+  if (sendDirectoriesString.size() <= 1) {
+    sendDirectoriesString.push_back('~');
+  }
+  std::cout << "-----------------";
+  std::cout << "DANO CLIENTOWI : " << sendDirectoriesString << std::endl;
+  std::cout << "-----------------";
+  sendDirectoryCLIENT(mysocket, sendDirectoriesString);
 }
 
 std::vector<std::string> goFunc(std::string str) {
@@ -87,7 +107,7 @@ std::vector<std::string> goFunc(std::string str) {
 }
 void sendPathToClient(std::string &path, tcp::socket &mysocket) {
   std::cout << "Wyslij Path";
-  path += '~';
+  path.push_back('~');
   try {
     boost::system::error_code ignored_error;
     boost::asio::write(mysocket, boost::asio::buffer(path), ignored_error);
@@ -97,11 +117,12 @@ void sendPathToClient(std::string &path, tcp::socket &mysocket) {
   path.pop_back();
 }
 
-void getFromClientPath(std::string &path, tcp::socket &mysocket) {
+void getFromClientPath(std::string &path, tcp::socket &mysocket,
+                       boost::asio::streambuf &sb) {
 
   boost::system::error_code ec;
-  boost::asio::streambuf sb;
-  size_t transferred = boost::asio::read_until(mysocket, sb, '`', ec);
+
+  size_t transferred = boost::asio::read_until(mysocket, sb, '|', ec);
   std::string buf;
   buf.resize(transferred);
   sb.sgetn(&buf[0], buf.size());
@@ -110,10 +131,11 @@ void getFromClientPath(std::string &path, tcp::socket &mysocket) {
   path = buf;
 }
 
-std::string getFromClientFile(tcp::socket &mysocket) {
+std::string getFromClientFile(tcp::socket &mysocket,
+                              boost::asio::streambuf &sb) {
   boost::system::error_code ec;
-  boost::asio::streambuf sb;
-  size_t transferred = boost::asio::read_until(mysocket, sb, '`', ec);
+
+  size_t transferred = boost::asio::read_until(mysocket, sb, '|', ec);
   std::string buf;
   buf.resize(transferred);
   sb.sgetn(&buf[0], buf.size());
@@ -126,20 +148,20 @@ void ChangeDirectory(boost::asio::io_context &io, std::string &path,
 
   std::cout << "SERWER URUCHOMIONY W TRYBIE NASŁUCHIWANIA KLIENTA" << std::endl;
   // DIRECTORY SEARCH MODE
-  bool showDirectories = true;
+  boost::asio::streambuf sb;
   while (true) {
-
     sendPathToClient(path, mysocket); // send path
-    if (showDirectories)
-      ListDirectories(io, mysocket,
-                      path); // see directories AND SEND IT TO CLIENT
-    else
-      showDirectories = true;
+    ListDirectories(io, mysocket,
+                    path); // see directories AND SEND IT TO CLIENT
+
+    boost::asio::steady_timer t(io, boost::asio::chrono::seconds(3));
+    t.wait();
     std::cout << "\n[SERWER] Aktualna sciezka wyslana: " << path << std::endl;
 
     std::cout << "[SERWER] Czekam na decyzje klienta..." << std::endl;
+
     std::string receviedPath = "";
-    getFromClientPath(receviedPath, mysocket);
+    getFromClientPath(receviedPath, mysocket, sb);
     if (receviedPath == "EXIT") {
       std::cout << "wychodzimy z petli";
       break;
@@ -147,17 +169,18 @@ void ChangeDirectory(boost::asio::io_context &io, std::string &path,
     if (receviedPath == "GIVE_FILES") {
       std::cout << "WYŚWIOETL PLIK " << std::endl;
       ListFilesInDirectory(path, mysocket); // LIST FILES AND SEND TO CLIENT
-      showDirectories = false;
-      receviedPath = path;
+      boost::asio::steady_timer t(io, boost::asio::chrono::seconds(3));
+      t.wait();
     } else {
       path = receviedPath;
     }
     std::cout << "[SERWER] Klient zmienil sciezke na: " << path << std::endl;
     std::cout << "---------- ----------" << std::endl;
   }
+
   // SERWER FILE PICK MODE
   ListFilesInDirectory(path, mysocket);
-  std::string whatFile = getFromClientFile(mysocket);
+  std::string whatFile = getFromClientFile(mysocket, sb);
   if (path.back() != '/') {
     path.push_back('/');
   }
