@@ -47,7 +47,7 @@ int main() {
       tcp::socket socket(io);
       acceptor.accept(socket);
       std::string place = "/home/";
-      ChangeDirectory(io, place, socket);
+      place = ChangeDirectory(io, place, socket);
       std::string whatFile = "";
       std::cout << "GIVE A FILE: ";
       std::cout << "PATH IS: " << place << std::endl;

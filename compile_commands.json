@@ -2,6 +2,22 @@
   {
     "arguments": [
       "/usr/bin/g++",
+      "-g",
+      "-I",
+      "/home/kamil/boostasio/boost_1_82_0",
+      "-c",
+      "-o",
+      "FunctionerServer.o",
+      "FunctionerServer.cpp"
+    ],
+    "directory": "/home/kamil/Dokumenty/ftpDSERVER20",
+    "file": "/home/kamil/Dokumenty/ftpDSERVER20/FunctionerServer.cpp",
+    "output": "/home/kamil/Dokumenty/ftpDSERVER20/FunctionerServer.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-g",
       "-I",
       "/home/kamil/boostasio/boost_1_82_0",
       "-c",
@@ -12,5 +28,35 @@
     "directory": "/home/kamil/Dokumenty/ftpDSERVER20",
     "file": "/home/kamil/Dokumenty/ftpDSERVER20/main.cpp",
     "output": "/home/kamil/Dokumenty/ftpDSERVER20/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-g",
+      "-I",
+      "/home/kamil/boostasio/boost_1_82_0",
+      "-c",
+      "-o",
+      "readers.o",
+      "readers.cpp"
+    ],
+    "directory": "/home/kamil/Dokumenty/ftpDSERVER20",
+    "file": "/home/kamil/Dokumenty/ftpDSERVER20/readers.cpp",
+    "output": "/home/kamil/Dokumenty/ftpDSERVER20/readers.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-g",
+      "-I",
+      "/home/kamil/boostasio/boost_1_82_0",
+      "-c",
+      "-o",
+      "senders.o",
+      "senders.cpp"
+    ],
+    "directory": "/home/kamil/Dokumenty/ftpDSERVER20",
+    "file": "/home/kamil/Dokumenty/ftpDSERVER20/senders.cpp",
+    "output": "/home/kamil/Dokumenty/ftpDSERVER20/senders.o"
   }
 ]

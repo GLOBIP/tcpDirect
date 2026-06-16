@@ -1,6 +1,6 @@
 SRCS=$(wildcard *.cpp)
 OBJS=$(SRCS:.cpp=.o)
-FLAGS = -I $(HOME)/boostasio/boost_1_82_0
+FLAGS = -g -I $(HOME)/boostasio/boost_1_82_0
 COMPILER = g++
 
 %.o: %.cpp
