@@ -16,46 +16,53 @@ using boost::asio::ip::tcp;
 using std::filesystem::path;
 using NetworkSize = boost::endian::big_uint64_t;
 static std::vector<char> read_file(path const &fspec) {
-  std::ifstream file(fspec, std::ios::binary);
-  return std::vector<char>(std::istreambuf_iterator<char>(file), {});
+	std::ifstream file(fspec, std::ios::binary);
+	return std::vector<char>(std::istreambuf_iterator<char>(file), {});
 }
 
 void send_file_content_over_tcp(path const &fspec, tcp::socket &socket) {
-  auto const contents = read_file(fspec);
-  std::cout << "File read successfully. File size: " << contents.size()
-            << " bytes." << std::endl;
+	auto const contents = read_file(fspec);
+	std::cout << "File read successfully. File size: " << contents.size()
+	<< " bytes." << std::endl;
 
-  // Send the file content
-  NetworkSize fileSize = contents.size();
+	// Send the file content
+	NetworkSize fileSize = contents.size();
 
-  std::vector<boost::asio::const_buffer> payload{
-      boost::asio::buffer(&fileSize, sizeof(fileSize)),
-      boost::asio::buffer(contents),
-  };
-  boost::system::error_code ec;
-  auto n = write(socket, payload, ec);
+	std::vector<boost::asio::const_buffer> payload{
+	boost::asio::buffer(&fileSize, sizeof(fileSize)),
+	boost::asio::buffer(contents),
+	};
+	boost::system::error_code ec;
+	auto n = write(socket, payload, ec);
 
-  std::cout << "Content bytes sent: " << n << " (" << ec.message() << ")\n";
+	std::cout << "Content bytes sent: " << n << " (" << ec.message() << ")\n";
 }
 
 int main() {
-  try {
-    boost::asio::io_context io;
-    tcp::acceptor acceptor(io, tcp::endpoint(tcp::v4(), 12234));
-    for (;;) {
+	try {
+		boost::asio::io_context io; //Input Oyutput functionality for user asynchrous objects
+		//including tcp::socket 
+		//tcp::acceptor
+		//tcp::socket
+		//used for accpepting new socket connections
+		for (;;) {
 
-      tcp::socket socket(io);
-      acceptor.accept(socket);
-      std::string place = "/home/";
-      place = ChangeDirectory(io, place, socket);
-      std::string whatFile = "";
-      std::cout << "GIVE A FILE: ";
-      std::cout << "PATH IS: " << place << std::endl;
-      send_file_content_over_tcp(place, socket);
-    }
-  } catch (std::exception &e) {
-    std::cerr << e.what() << '\n';
-  }
+			tcp::acceptor acceptor(io, tcp::endpoint(tcp::v4(), 12234));
+			tcp::socket socket(io);
+			//provides asynchronous and blocking stream-oriented socket functionality.
+			acceptor.accept(socket);
+			//accpet the new connetcion 
+			std::string place = "/home/";
+			place = ChangeDirectory(io, place, socket);
+			std::string whatFile = "";
+			std::cout << "GIVE A FILE: ";
+			std::cout << "PATH IS: " << place << std::endl;
+			send_file_content_over_tcp(place, socket);
+		}
+	}
+	catch (std::exception &e) {
+		std::cerr << e.what() << '\n';
+	}
 
-  return 0;
+	return 0;
 }

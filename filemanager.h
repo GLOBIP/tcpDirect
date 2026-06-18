@@ -29,5 +29,7 @@ std::string getFromClientPath(tcp::socket &mysocket,
 std::string getFromClientFile(tcp::socket &mysocket,
                               boost::asio::streambuf &sb);
 void doSendDirectories(tcp::socket &mysocket, boost::asio::streambuf &sb);
+void doreadFiles(tcp::socket &client, boost::asio::streambuf &sb);
 std::string ChangeDirectory(boost::asio::io_context &io, std::string &path,
                             tcp::socket &mysocket);
+
